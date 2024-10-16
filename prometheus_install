@@ -1,0 +1,51 @@
+1. After downloading, installing, and extracting Prometheus into CentOS from GitHub 
+using the main.yml playbook, copy the prometheus files into the appropriate directories. 
+Move into the "/usr/local/bin/prometheus-2.48.1.linux-amd64 directory" and enter these commands:
+
+# sudo cp prometheus /usr/local/bin
+# sudo cp promtool /usr/local/bin
+
+2. Set up Prometheus Directories
+
+# sudo mkdir /etc/prometheus
+# sudo mkdir /var/lib/prometheus
+
+3. Move Configuration Files into "etc/prometheus" directory
+
+# sudo cp prometheus.yml /etc/prometheus/
+# sudo cp -r consoles /etc/prometheus/
+# sudo cp -r console_libraries /etc/prometheus/
+
+4. Create the "prometheus.service" configuration in order for Prometheus to start
+
+# cd /etc/systemd/system
+# sudo nano prometheus.service
+
+5. Enter this configuration into the config file
+
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+	--config.file /etc/prometheus/prometheus.yml \
+	--storage.tsdb.path /var/lib/prometheus \
+	--web.console.templates=/etc/prometheus/consoles \
+	--web.console.libraries=/etc/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target
+
+
+6. Reload Systemd and start and enable Prometheus
+
+# sudo systemctl daemon-reload
+# sudo systemctl start prometheus
+# sudo systemctl enable prometheus
+
+7. Kill yourself
