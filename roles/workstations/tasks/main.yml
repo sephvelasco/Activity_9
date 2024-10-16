@@ -1,0 +1,12 @@
+---
+- name: Install Prometheus (Ubuntu)
+  apt:
+    name: prometheus
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install Prometheus (CentOS)
+  yum:
+    name: golang-github-prometheus
+    state: latest
+  when: ansible_distribution == "CentOS"

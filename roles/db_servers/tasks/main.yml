@@ -1,0 +1,16 @@
+---
+- name: Install Prometheus (Ubuntu)
+  apt:
+    name: prometheus
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install Prometheus (CentOS)
+  unarchive:
+    src: https://github.com/prometheus/prometheus/releases/download/v2.48.1/prometheus-2.48.1.linux-amd64.tar.gz
+    dest: /usr/local/bin
+    remote_src: yes
+    mode: 0755
+    owner: root
+    group: root
+  when: ansible_distribution == "CentOS"
